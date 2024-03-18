@@ -3,11 +3,10 @@ import "./utils/bling";
 // todo app function
 function todoAppFunc() {
   // state
-  let state = { id: 0, uncompletedTasks: [], completedTasked: [] };
-  console.log(state);
+  let state = { tasks: [] };
+
   // ui
   let ui = {};
-  console.log(ui);
 
   // elements to be rendered on the DOM
   return makeElem("main", {className: "flex justify-center items-center min-h-svh w-full"  }, [
@@ -40,22 +39,37 @@ function todoAppFunc() {
   function createTodo(todo) {
     let item, text;
 
-    item = makeElem("li", { className: "todo-item flex w-full h-12 px-4 bg-b-primary items-center justify-between rounded text-clr-primary" }, [
+    item = makeElem("li", { id: `${todo.id}`, className: "todo-item flex w-full h-12 px-4 bg-b-primary items-center justify-between rounded text-clr-primary" }, [
       (text = makeElem("span", {}, [todo.text])),
       makeElem("span", { className: "todo-action-container flex gap-6" }, [
-        makeElem("img", {
-          src: "assets/icons/check-icon.svg",
-          alt: "check icon",
-        }),
-        makeElem("img", {
-          src: "assets/icons/delete-icon.svg",
-          alt: "delete icon",
-        }),
+        makeElem('button', {className: "check-icon", type: "button", "aria-labelledby": "mark to-do as completed", onclick: checkTaskAsCompleted, once: true}, [
+          makeElem("img", {
+            src: "assets/icons/check-icon.svg",
+            alt: "check icon",
+          })
+        ]),
+        makeElem('button', {className: "delete-icon", type: "button", "aria-labelledby": "delete to-do"}, [
+          makeElem("img", {
+            src: "assets/icons/delete-icon.svg",
+            alt: "delete icon",
+          })
+        ]),
       ]),
     ]);
 
     return item;
-  }
+  };
+
+  // completed task func
+  function completedTodo(todo) {
+    let item, text;
+
+    item = makeElem("li", { className: "todo-item flex w-full h-12 px-4 bg-b-primary items-center justify-between rounded text-clr-secondary italic line-through" }, [
+      text = makeElem("span", {}, [todo.text])
+    ]);
+
+    return item;
+  };
 
   // function to add new task by crabbing the newly inputed value
   function add(e) {
@@ -66,23 +80,40 @@ function todoAppFunc() {
     if (!text) return;
 
     let todo = { text, completed: false, id: Date.now() };
-    console.log(todo);
+    // console.log(todo);
 
     ui.input.value = "";
 
-    if (todo.completed === "true") {
-      state.completedTasked.push(todo);
-    } else {
-      state.uncompletedTasks.push(todo);
-    }
-    console.log(state.uncompletedTasks);
+    state.tasks.push(todo);
+    // console.log(state)
+
+    // console.log(state.uncompletedTasks);
 
     ui?.uncompletedTasks.prepend(createTodo(todo));
-    ui?.completedTasks.prepend(createTodo(todo));
+  };
+
+  function checkTaskAsCompleted(e) {
+    e.preventDefault();
+    // const checkBtn = $('.check-icon');
+    const checkedTask = this.parentElement.parentElement;
+    const checkedTaskId = checkedTask.getAttribute('id');
+
+    for (let task of state.tasks) {
+      if (task.id == checkedTaskId) {
+        task.completed = "true";
+        ui?.completedTasks.prepend(completedTodo(task));
+      }
+    }
+    
+    // console.log(checkBtn)
+    // checkBtn.removeAttribute('onclick');
+    // console.log(state)
+    // console.log(ui)
+
   }
 }
 
-// render to the DOM
+// // render to the DOM
 (function render() {
   document.body.prepend(todoAppFunc());
 })();
