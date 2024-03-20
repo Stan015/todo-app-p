@@ -17,7 +17,7 @@ function todoAppFunc() {
         "section",
         {
           className:
-            "flex flex-col w-2/5 max-lg:w-3/4 max-sm:w-4/5 p-10 gap-10 rounded bg-b-secondary",
+            "flex flex-col w-2/5 max-lg:w-3/4 max-md:w-4/5 max-sm:w-11/12 p-10 max-sm:p-6 gap-10 rounded bg-b-secondary",
         },
         [
           (ui.form = makeElem(
@@ -29,7 +29,7 @@ function todoAppFunc() {
             [
               (ui.input = makeElem("input", {
                 className:
-                  "input-task bg-b-secondary w-4/5 rounded text-white border border-clr-primary p-2 placeholder:text-gray-500 placeholder:text-sm hover:border-clr-primary active:border-clr-primary focus:outline-none",
+                  "input-task bg-b-secondary w-4/5 rounded text-white border border-clr-primary p-2 placeholder:text-gray-500 placeholder:text-sm hover:border-clr-active active:border-clr-active focus:outline-none focus:border-clr-active transition-all duration-300",
                 placeholder: "Add a new task",
                 name: "new-task",
                 id: "new-task",
@@ -39,7 +39,7 @@ function todoAppFunc() {
                 {
                   type: "submit",
                   className:
-                    "submit-btn bg-clr-primary w-10 h-10 border border-clr-primary rounded text-white text-xl",
+                    "submit-btn bg-clr-primary w-10 h-10 border border-clr-primary rounded text-white text-xl hover:border-clr-active focus:border-clr-active transition-all duration-300 hover:bg-clr-active",
                   onclick: add,
                 },
                 ["+"]
@@ -55,7 +55,7 @@ function todoAppFunc() {
               {
                 id: "uncompletedTasks",
                 className:
-                  "flex flex-col max-h-75 min-h-68 overflow-y-scroll hide-scrollbar",
+                  "flex flex-col max-h-75 min-h-68 max-sm:min-h-52 max-sm:max-h-56 overflow-y-scroll hide-scrollbar",
               },
               []
             )),
@@ -69,7 +69,7 @@ function todoAppFunc() {
               {
                 id: "completed-tasks",
                 className:
-                  "flex flex-col gap-5 max-h-24 min-h-20 overflow-y-scroll hide-scrollbar",
+                  "flex flex-col gap-5 max-md:max-h-24 max-h-22 min-h-20 overflow-y-scroll hide-scrollbar",
               },
               []
             )),
@@ -88,7 +88,7 @@ function todoAppFunc() {
       {
         id: `${todo.id}`,
         className:
-          "todo-item flex w-full mt-5 mb-3 min-h-max p-4 bg-b-primary items-center justify-between rounded text-clr-primary relative",
+          "todo-item flex w-full mt-5 mb-3 min-h-max gap-2 p-4 bg-b-primary items-center justify-between rounded text-clr-primary relative",
       },
       [
         (text = makeElem("span", { className: "text-base w-4/5" }, [
@@ -103,6 +103,7 @@ function todoAppFunc() {
               "aria-labelledby": "mark to-do as completed",
               onclick: checkTaskAsCompleted,
               once: true,
+              onmouseover: changeCheckIconFilter,
             },
             [
               makeElem("img", {
@@ -114,10 +115,11 @@ function todoAppFunc() {
           makeElem(
             "button",
             {
-              className: "delete-icon",
+              className: "delete-icon hover:filter-img-clr",
               type: "button",
               "aria-labelledby": "delete to-do",
               onclick: deleteTask,
+              onmouseover: changeDeleteIconFilter,
             },
             [
               makeElem("img", {
@@ -145,6 +147,7 @@ function todoAppFunc() {
       ]
     );
 
+    // countState()
     // console.log(state);
 
     return item;
@@ -163,14 +166,14 @@ function todoAppFunc() {
       [
         (text = makeElem(
           "span",
-          { className: "text-base line-through w-9/12 h-max" },
+          { className: "text-base line-through w-9/12 line-clamp-2" },
           [todo.text]
         )),
         makeElem(
           "p",
           {
             className:
-              "time-added flex gap-1 text-xs -top-4 px-4 right-0 py-2 bg-b-primary rounded-t shrink-0 max-sm:shrink",
+              "time-added flex gap-1 text-xs -top-4 right-0 bg-b-primary rounded-t shrink-0 max-sm:shrink",
           },
           [
             makeElem(
@@ -211,6 +214,8 @@ function todoAppFunc() {
 
     state.tasks.push(todo);
     ui?.uncompletedTasks.prepend(createTodo(todo));
+    // console.log(state.tasks);
+    countState()
   }
 
   function checkTaskAsCompleted(e) {
@@ -227,6 +232,8 @@ function todoAppFunc() {
         ui?.completedTasks.prepend(completedTodo(task));
       }
     }
+
+    countState()
   }
 
   function deleteTask(e) {
@@ -242,8 +249,32 @@ function todoAppFunc() {
         taskToDelete.remove();
       }
     }
+
+    countState()
     // console.log(state);
   }
+
+  // count total completed, uncompleted and deleted tasks
+  function countState() {
+    // console.log(state);
+    const completedTasks = []
+    const uncompletedTasks = []
+    const deletedTasks = []
+
+    for (let task of state.tasks) {
+      if (task.completed == 'true') completedTasks.push(task);
+      if (task.completed == 'false') uncompletedTasks.push(task);
+      if (task.deleted == 'true') deletedTasks.push(task);
+    }
+
+    const totalCompletedTasks = completedTasks.length;
+    const totalUncompletedTasks = uncompletedTasks.length;
+    const totalDeletedTasks = deletedTasks.length;
+
+    console.log(totalCompletedTasks, totalUncompletedTasks, totalDeletedTasks)
+    console.log(completedTasks, uncompletedTasks, deletedTasks)
+  } 
+  //
 
   // get date-time in the format: hh/mm dd/mm/yyyy
   function getCurrentDateTime() {
@@ -256,6 +287,28 @@ function todoAppFunc() {
 
     return `${hours}:${minutes} ${day}/${month}/${year}`;
   }
+  //
+
+  // just playing around with the styling. changing action icon-img filter on hover
+  function changeImgFilter(elem) {
+    const elemHovered = $(`.${elem}`);
+
+    elemHovered.on("mouseover", () => {
+      elemHovered.classList.add("filter-img-clr");
+    });
+    elemHovered.on("mouseleave", () => {
+      elemHovered.classList.remove("filter-img-clr");
+    });
+  }
+
+  function changeCheckIconFilter() {
+    changeImgFilter("check-icon");
+  }
+
+  function changeDeleteIconFilter() {
+    changeImgFilter("delete-icon");
+  }
+  //
 }
 
 // // render to the DOM
