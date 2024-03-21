@@ -205,7 +205,7 @@ function todoAppFunc() {
             makeElem(
               "img",
               {
-                src: "/delete-icon.svg",
+                src: "/date-time-icon.svg",
                 alt: "date-time icon",
               },
               []
