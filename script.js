@@ -161,7 +161,10 @@ function todoAppFunc() {
           [
             makeElem(
               "img",
-              { src: "./assets/icons/date-time-icon.svg", alt: "date-time icon" },
+              {
+                src: "./assets/icons/date-time-icon.svg",
+                alt: "date-time icon",
+              },
               []
             ),
             getCurrentDateTime(),
@@ -201,7 +204,10 @@ function todoAppFunc() {
           [
             makeElem(
               "img",
-              { src: "./assets/icons/date-time-icon.svg", alt: "date-time icon" },
+              {
+                src: "./assets/icons/date-time-icon.svg",
+                alt: "date-time icon",
+              },
               []
             ),
             getCurrentDateTime(),
