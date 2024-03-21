@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .filter-img-clr {
-
-    & img {
-        filter: brightness(0) saturate(100%) invert(7%) sepia(87%) saturate(4161%) hue-rotate(265deg) brightness(98%) contrast(95%) !important;
-    }
+  & img {
+    filter: brightness(0) saturate(100%) invert(7%) sepia(87%) saturate(4161%)
+      hue-rotate(265deg) brightness(98%) contrast(95%) !important;
+  }
 }

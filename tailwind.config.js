@@ -15,7 +15,7 @@ export default {
       },
       maxHeight: {
         75: "19rem",
-        22: "5.5rem"
+        22: "5.5rem",
       },
     },
   },

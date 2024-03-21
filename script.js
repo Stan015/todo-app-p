@@ -3,10 +3,17 @@ import "./utils/bling";
 // todo app function
 function todoAppFunc() {
   // state
-  let state = { tasks: [] };
+  let state = {
+    tasks: [],
+    totalCompletedTasks: 0,
+    totalUncompletedTasks: 0,
+    totalDeletedTasks: 0,
+  };
 
   // ui
   let ui = {};
+
+  // let totalCompletedTasks, totalUncompletedTasks, totalDeletedTasks;
 
   // elements to be rendered on the DOM
   return makeElem(
@@ -47,9 +54,17 @@ function todoAppFunc() {
             ]
           )),
           makeElem("div", { className: "tasks-to-do" }, [
-            makeElem("h2", { className: "text-white mb-1 text-lg" }, [
-              `Tasks to do - $`,
-            ]),
+            makeElem(
+              "h2",
+              {
+                className: "text-white mb-1 text-lg",
+                id: "total-uncompleted-tasks",
+              },
+              [
+                "Tasks to do - ",
+                makeElem("span", { id: "total-uncompleted-tasks-span" }, [0]),
+              ]
+            ),
             (ui.uncompletedTasks = makeElem(
               "ul",
               {
@@ -61,9 +76,17 @@ function todoAppFunc() {
             )),
           ]),
           makeElem("div", { className: "completed-tasks-div" }, [
-            makeElem("h2", { className: "text-white mb-4 text-lg" }, [
-              `Done - $`,
-            ]),
+            makeElem(
+              "h2",
+              {
+                className: "text-white mb-4 text-lg",
+                id: "total-completed-tasks",
+              },
+              [
+                "Done - ",
+                makeElem("span", { id: "total-completed-tasks-span" }, [0]),
+              ]
+            ),
             (ui.completedTasks = makeElem(
               "ul",
               {
@@ -187,7 +210,7 @@ function todoAppFunc() {
       ]
     );
 
-    // console.log(state);
+    countState();
 
     return item;
   }
@@ -215,7 +238,9 @@ function todoAppFunc() {
     state.tasks.push(todo);
     ui?.uncompletedTasks.prepend(createTodo(todo));
     // console.log(state.tasks);
-    countState()
+    countState();
+
+    // state = countState()
   }
 
   function checkTaskAsCompleted(e) {
@@ -226,54 +251,61 @@ function todoAppFunc() {
 
     for (let task of state.tasks) {
       if (task.id == checkedTaskId) {
-        task.completed = "true";
+        task.completed = true;
         task.timedCompleted = `${getCurrentDateTime()}`;
         checkedTask.remove();
         ui?.completedTasks.prepend(completedTodo(task));
       }
     }
 
-    countState()
+    countState();
   }
 
   function deleteTask(e) {
     e.preventDefault();
+
     // const deleteBtn = $('.delete-icon');
     const taskToDelete = this.parentElement.parentElement;
     const taskToDeleteId = taskToDelete.getAttribute("id");
 
     for (let task of state.tasks) {
       if (task.id == taskToDeleteId) {
-        task.deleted = "true";
+        task.deleted = true;
         task.timeDeleted = `${getCurrentDateTime()}`;
         taskToDelete.remove();
       }
     }
 
-    countState()
+    countState();
     // console.log(state);
   }
 
   // count total completed, uncompleted and deleted tasks
   function countState() {
     // console.log(state);
-    const completedTasks = []
-    const uncompletedTasks = []
-    const deletedTasks = []
+    const completedTasks = [];
+    const uncompletedTasks = [];
+    const deletedTasks = [];
 
     for (let task of state.tasks) {
-      if (task.completed == 'true') completedTasks.push(task);
-      if (task.completed == 'false') uncompletedTasks.push(task);
-      if (task.deleted == 'true') deletedTasks.push(task);
+      if (task.completed === true) completedTasks.push(task);
+      if (task.completed === false && task.deleted === false)
+        uncompletedTasks.push(task);
+      if (task.deleted === true && task.completed === false)
+        deletedTasks.push(task);
+
+      (state.totalCompletedTasks = completedTasks.length),
+        (state.totalUncompletedTasks = uncompletedTasks.length),
+        (state.totalDeletedTasks = deletedTasks.length);
+
+      const totalUncompletedTasksText = $("#total-uncompleted-tasks-span");
+      const totalCompletedTasksText = $("#total-completed-tasks-span");
+
+      totalUncompletedTasksText.innerText =
+        state.totalUncompletedTasks.valueOf();
+      totalCompletedTasksText.innerText = state.totalCompletedTasks.valueOf();
     }
-
-    const totalCompletedTasks = completedTasks.length;
-    const totalUncompletedTasks = uncompletedTasks.length;
-    const totalDeletedTasks = deletedTasks.length;
-
-    console.log(totalCompletedTasks, totalUncompletedTasks, totalDeletedTasks)
-    console.log(completedTasks, uncompletedTasks, deletedTasks)
-  } 
+  }
   //
 
   // get date-time in the format: hh/mm dd/mm/yyyy
