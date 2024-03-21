@@ -130,7 +130,7 @@ function todoAppFunc() {
             },
             [
               makeElem("img", {
-                src: "assets/icons/check-icon.svg",
+                src: "./assets/icons/check-icon.svg",
                 alt: "check icon",
               }),
             ]
@@ -146,7 +146,7 @@ function todoAppFunc() {
             },
             [
               makeElem("img", {
-                src: "assets/icons/delete-icon.svg",
+                src: "./assets/icons/delete-icon.svg",
                 alt: "delete icon",
               }),
             ]
@@ -161,7 +161,7 @@ function todoAppFunc() {
           [
             makeElem(
               "img",
-              { src: "assets/icons/date-time-icon.svg", alt: "date-time icon" },
+              { src: "./assets/icons/date-time-icon.svg", alt: "date-time icon" },
               []
             ),
             getCurrentDateTime(),
@@ -201,7 +201,7 @@ function todoAppFunc() {
           [
             makeElem(
               "img",
-              { src: "assets/icons/date-time-icon.svg", alt: "date-time icon" },
+              { src: "./assets/icons/date-time-icon.svg", alt: "date-time icon" },
               []
             ),
             getCurrentDateTime(),
