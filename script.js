@@ -130,7 +130,7 @@ function todoAppFunc() {
             },
             [
               makeElem("img", {
-                src: "./assets/icons/check-icon.svg",
+                src: "./check-icon.svg",
                 alt: "check icon",
               }),
             ]
@@ -146,7 +146,7 @@ function todoAppFunc() {
             },
             [
               makeElem("img", {
-                src: "./assets/icons/delete-icon.svg",
+                src: "/delete-icon.svg",
                 alt: "delete icon",
               }),
             ]
@@ -162,7 +162,7 @@ function todoAppFunc() {
             makeElem(
               "img",
               {
-                src: "./assets/icons/date-time-icon.svg",
+                src: "/date-time-icon.svg",
                 alt: "date-time icon",
               },
               []
@@ -205,7 +205,7 @@ function todoAppFunc() {
             makeElem(
               "img",
               {
-                src: "./assets/icons/date-time-icon.svg",
+                src: "/delete-icon.svg",
                 alt: "date-time icon",
               },
               []
