@@ -39,7 +39,7 @@ const makeElem = (elemType, props, children) => {
   if (props) {
     for (const [key, value] of Object.entries(props)) {
       if (key === 'onclick' && props['once']) {
-        elem.addEventListener('click', value, { once: true });
+        elem.on('click', value, { once: true });
       } else {
         elem[key] = value;
       }
